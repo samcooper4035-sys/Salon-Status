@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Barber Admin - Control Panel</title>
+    <style>
+        body { font-family: 'Segoe UI', sans-serif; background: #121212; color: white; padding: 20px; text-align: center; }
+        .slot-container { max-width: 400px; margin: 0 auto; }
+        
+        /* Large, easy-to-tap rows */
+        .admin-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #222;
+            padding: 20px;
+            margin-bottom: 10px;
+            border-radius: 12px;
+            border: 1px solid #333;
+        }
+
+        .time-label { font-size: 1.2rem; font-weight: bold; }
+
+        /* The Toggle Switch */
+        .switch { position: relative; display: inline-block; width: 60px; height: 34px; }
+        .switch input { opacity: 0; width: 0; height: 0; }
+        .slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #e74c3c; transition: .4s; border-radius: 34px; }
+        .slider:before { position: absolute; content: ""; height: 26px; width: 26px; left: 4px; bottom: 4px; background-color: white; transition: .4s; border-radius: 50%; }
+        input:checked + .slider { background-color: #27ae60; }
+        input:checked + .slider:before { transform: translateX(26px); }
+        
+        .status-label { font-size: 0.8rem; margin-top: 5px; display: block; }
+    </style>
+</head>
+<body>
+
+    <h2>Barber Dashboard</h2>
+    <p>Switch to 🟢 when you are free.</p>
+
+    <div class="slot-container" id="adminGrid">
+        </div>
+
+    <script>
+        // Example time slots for a morning shift
+        const times = ["08:00 AM", "08:15 AM", "08:30 AM", "08:45 AM", "09:00 AM", "09:15 AM", "09:30 AM", "09:45 AM", "10:00 AM", "10:15 AM", "10:30 AM", "10:45 AM", "11:00 AM",
+       "11:15 AM", "11:30 AM", "11:45 AM", "12:00 PM", "12:15 PM", "12:30 PM", "12:45 PM", "01:00 PM", "01:15 PM", "01:30 PM", "01:45 PM", "02:00 PM", "02:15 PM", "02:30 PM", "02:45 PM", "03:00 PM", "03:15 PM", "03:30 PM", "03:45 PM", "04:00 PM", "04:15 PM", "04:30 PM", "04:45 PM", "05:00 PM", "05:15 PM", "05:30 PM", "05:45 PM", "06:00 PM", "06:15 PM", "06:30 PM", "06:45 PM", "07:00 PM", "07:15 PM", "07:30 PM", "07:45 PM", "08:00 PM", "08:15 PM", "08:30 PM", "08:45 PM", "09:00 PM"
+        ];
+        const grid = document.getElementById('adminGrid');
+
+        times.forEach(time => {
+            const row = document.createElement('div');
+            row.className = 'admin-row';
+            row.innerHTML = `
+                <div class="time-label">${time}</div>
+                <div>
+                    <label class="switch">
+                        <input type="checkbox" onchange="updateStatus('${time}', this.checked)">
+                        <span class="slider"></span>
+                    </label>
+                    <span class="status-label">Idle / Busy</span>
+                </div>
+            `;
+            grid.appendChild(row);
+        });
+
+        function updateStatus(time, isIdle) {
+            const status = isIdle ? "IDLE (Free)" : "BUSY (In Chair)";
+            console.log(`Updating ${time} to ${status} in Database...`);
+            // This is where your Firebase code "db.collection('slots').update(...)" goes!
+        }
+    </script>
+</body>
+</html>
